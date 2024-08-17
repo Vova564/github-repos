@@ -1,4 +1,4 @@
-package com.example.githubrepos.api.error.excetion;
+package com.example.githubrepos.api.error.exception;
 
 public class UserNameNotFoundException extends RuntimeException {
     public UserNameNotFoundException(String exception) {

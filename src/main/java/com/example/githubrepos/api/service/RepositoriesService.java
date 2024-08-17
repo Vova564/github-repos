@@ -1,6 +1,7 @@
 package com.example.githubrepos.api.service;
 
-import com.example.githubrepos.api.error.excetion.UserNameNotFoundException;
+import com.example.githubrepos.api.error.exception.ApiServiceException;
+import com.example.githubrepos.api.error.exception.UserNameNotFoundException;
 import com.example.githubrepos.api.dto.RepositoriesResponseDTO;
 import com.example.githubrepos.api.model.BranchModel;
 import com.example.githubrepos.client.GitHubApiClient;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.util.Collections.emptyList;
 
 @Service
 @Log4j2
@@ -45,11 +44,9 @@ public class RepositoriesService {
 
             return repositoriesResponseDTO;
         } catch (FeignException.FeignClientException exception) {
-            if (exception.status() == 404) {
-                throw new UserNameNotFoundException("User with name " + username + " does not exist");
-            }
-            log.error("{} - {}", exception.status(), exception.getMessage());
-            return emptyList();
+            throw new UserNameNotFoundException("User with name " + username + " not found");
+        } catch (FeignException exception) {
+            throw new ApiServiceException("An error occurred while processing the request. Please try again later");
         }
     }
 }
