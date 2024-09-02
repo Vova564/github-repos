@@ -2,9 +2,11 @@ package com.example.githubrepos.api.error;
 
 import com.example.githubrepos.api.error.dto.BadContentTypeExceptionResponseDTO;
 import com.example.githubrepos.api.error.dto.ApiServiceExceptionResponseDTO;
+import com.example.githubrepos.api.error.dto.RecordsNotFoundExceptionResponseDTO;
 import com.example.githubrepos.api.error.dto.UserNotFoundExceptionResponseDTO;
 import com.example.githubrepos.api.error.exception.ApiServiceException;
 import com.example.githubrepos.api.error.exception.BadContentTypeException;
+import com.example.githubrepos.api.error.exception.RecordsNotFoundException;
 import com.example.githubrepos.api.error.exception.UserNameNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -32,5 +34,11 @@ public class ErrorHandler {
     public ResponseEntity<ApiServiceExceptionResponseDTO> handleApiServiceException(ApiServiceException exception) {
         log.warn("Caught ApiServiceException: {} - {}", exception.getMessage(), exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiServiceExceptionResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+    }
+
+    @ExceptionHandler(RecordsNotFoundException.class)
+    public ResponseEntity<RecordsNotFoundExceptionResponseDTO> handleApiServiceException(RecordsNotFoundException exception) {
+        log.warn("Caught RecordsNotFoundException: {} - {}", exception.getMessage(), exception);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RecordsNotFoundExceptionResponseDTO(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
 }
